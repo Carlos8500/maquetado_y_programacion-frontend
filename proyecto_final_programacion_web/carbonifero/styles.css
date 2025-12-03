@@ -1,0 +1,270 @@
+/* Estilo del fondo */
+body {
+    background-image: url(imagenes/Carbonifero_fondo.png);
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;
+    box-sizing: border-box;
+}
+
+/* Estilo del contenedor y la informacion principal */
+main {
+    box-sizing: border-box;
+    border-width: 15px;
+    border-style: double;
+    color: rgb(4, 35, 45);
+    background-color: rgb(15, 132, 164);
+    border-color: rgb(9, 71, 88);
+    font-family: 'Merriweather';
+    font-size: 32px;
+    text-align: justify;
+}
+
+/* Media query: hacer main flexible en columna */
+@media (max-width: 1145px) {
+    main {
+        display: flex;
+        flex-direction: column;
+        font-size: 24px;
+        padding: 10px;
+    }
+}
+
+/* Estilo del titulo principal */
+#titulo {
+    background-color: rgb(15, 132, 164);
+    color: rgb(4, 35, 45);
+    text-align: center;
+    border-width: 15px;
+    border-color: rgb(9, 71, 88);
+    border-style: double;
+    font-family: 'Merriweather';
+    font-size: 100px;
+}
+
+/* Media query: reducir fuente del título */
+@media (max-width: 1030px) {
+    #titulo {
+        font-size: 40px; /* Ajuste proporcional */
+        padding: 20px;
+    }
+}
+
+/* Media query: remover padding y ajustar */
+@media (max-width: 1145px) {
+    .texto_1 {
+        padding-left: 0;
+    }
+}
+
+/* Estilo del pie de pagina (footer) */
+footer {
+    color: rgb(4, 35, 45);
+    background-color: rgb(15, 132, 164);
+    font-family: 'Merriweather';
+    font-size: 25px;
+    border-width: 15px;
+    border-color: rgb(9, 71, 88);
+    border-style: double;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Media query: apilar footer */
+@media (max-width: 1145px) {
+    footer {
+        flex-direction: column;
+        text-align: center;
+        font-size: 18px;
+        padding: 10px;
+    }
+    .instagram, .x {
+        margin: 10px 0;
+    }
+}
+
+/* Estilo para el nav */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Media query: centrar y ajustar nav */
+@media (max-width: 1145px) {
+    nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+
+/* Estilo para el boton animales */
+.animales {
+    background-color: rgb(15, 132, 164);
+    color: rgb(4, 35, 45);
+    padding: 25px;
+    padding-left: 59px;
+    padding-right: 59px;
+    text-align: center;
+    border-width: 15px;
+    border-color: rgb(9, 71, 88);
+    border-style: double;
+    font-size: 96px;
+    font-family: 'Merriweather';
+}
+
+/* Media query: reducir tamaño */
+@media (max-width: 1145px) {
+    .animales {
+        font-size: 48px;
+        padding: 15px 30px;
+        margin: 0;
+    }
+}
+
+/* Estilo para el boton plantas */
+.plantas {
+    background-color: rgb(15, 132, 164);
+    color: rgb(4, 35, 45);
+    padding: 25px;
+    padding-left: 112px;
+    padding-right: 112px;
+    text-align: center;
+    border-width: 15px;
+    border-color: rgb(9, 71, 88);
+    border-style: double;
+    font-size: 96px;
+    font-family: 'Merriweather';
+}
+
+/* Media query: reducir tamaño */
+@media (max-width: 1145px) {
+    .plantas {
+        font-size: 48px;
+        padding: 15px 56px;
+        margin: 0;
+    }
+}
+
+/* Estilo para el boton de regresar (flecha) */
+.flecha {
+    position: fixed;
+    border-radius: 100%;
+    text-align: center;
+    top: 60px;
+    left: 25px;
+    border-width: 15px;
+    border-color: rgb(9, 71, 88);
+    border-style: double;
+    background-color: rgb(15, 132, 164);
+}
+
+/* Media query: ajustar posición*/
+@media (max-width: 1000px) {
+    .flecha {
+        top: 65px;
+        left: 5px;
+    }
+}
+
+/* Media query: ajustar posición*/
+@media (max-width: 1000px) {
+    .flecha {
+        top: 65px;
+        left: 5px;
+    }
+}
+
+/* Media query: desaparecer flecha*/
+@media(max-width : 800px) {
+    .flecha{
+    display: none !important;
+}
+}
+
+/* Estilo de la flecha sacada de google font */
+.material-symbols-outlined {
+    color: rgb(9, 71, 88);
+    font-size: 100px;
+    font-variation-settings: 'FILL' 0, 'wght' 800, 'GRAD' 0, 'opsz' 40;
+}
+
+/* Media query: ajustar tamaño*/
+@media (max-width: 1300px) {
+    .material-symbols-outlined {
+        font-size: 80px;
+}}
+
+/* Media query: ajustar tamaño*/
+@media (max-width: 1150px) {
+    .material-symbols-outlined {
+        font-size: 50px;
+}}
+
+/*Estilos para que el texto rodee la imagen*/
+.boxed-img{ width: 48%; 
+    height: auto; 
+    float:left; 
+    margin-right: 1rem; 
+    border: double 15px rgb(9, 71, 88); 
+    display:block;
+}
+
+/* Media query: ajustar tamaño y posición*/
+@media (max-width:720px){
+    .boxed-img{
+    width:100%; 
+    float:none; 
+    margin:0 0 1rem 0; }
+}
+
+/* Logo de red social instagram que se encuentra en el footer */
+.instagram {
+    width: 100px;
+    height: auto;
+}
+
+/* Media query: ajustar logos */
+@media (max-width: 1145px) {
+    .instagram {
+        width: 60px;
+        margin: 10px 0;
+    }
+}
+
+/* Logo de red social X que se encuentra en el footer */
+.x {
+    width: 100px;
+    height: auto;
+}
+
+/* Media query: ajustar logos */
+@media (max-width: 1145px) {
+    .x {
+        width: 60px;
+        margin: 10px 0;
+    }
+}
+
+/*Bounce scale para hacer que los botones crezcan un poco mas*/
+@keyframes bounce-scale {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/*Animacion y cambio de color con hover*/
+button:hover{
+    animation: bounce-scale 400ms ease;
+    opacity: 0.9;
+    background-color: rgb(5, 199, 253);
+    border-color: rgb(10, 109, 137);
+}
+
+/*Animacion con hover*/
+a:hover{
+    animation: bounce-scale 400ms ease;
+}
+

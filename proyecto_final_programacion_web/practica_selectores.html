@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fauna en las Eras Geológicas</title>
+  <!-- Fuentes bonitas -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    #faunaDetallada .epoch-card {
+      cursor: default;
+      pointer-events: none;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: 'Open Sans', sans-serif;
+      color:#fff;
+      overflow:hidden;
+      background:#071027;
+    }
+    section.screen{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100vh;
+      background-size:cover;
+      background-position:center;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      padding:2.5rem;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .6s ease, transform .6s ease;
+      transform:translateY(20px);
+    }
+    section.screen.active{
+      opacity:1;
+      pointer-events:auto;
+      transform:translateY(0);
+    }
+    .overlay{
+      background:rgba(0,0,0,0.55);
+      padding:2rem;
+      border-radius:14px;
+      text-align:center;
+      max-width:920px;
+      margin:0 auto;
+    }
+    h1.title{
+      font-family: 'Montserrat', sans-serif;
+      font-size:2.8rem;
+      color:#a5f3fc;
+      letter-spacing:1px;
+      margin-bottom:.5rem;
+      text-shadow:2px 2px 10px rgba(0,0,0,.6);
+    }
+    p.lead{
+      font-family: 'Open Sans', sans-serif;
+      color:#d1d5db;
+      font-size:1.1rem;
+      margin-bottom:1.4rem;
+    }
+    .btn{
+      display:inline-block;
+      padding:.9rem 1.8rem;
+      border-radius:10px;
+      border:0;
+      background:linear-gradient(90deg,#38bdf8,#818cf8);
+      color:#031025;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .18s ease,box-shadow .18s ease;
+    }
+    .btn:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(129,140,248,.18)}
+    .layout-hero{display:flex;align-items:flex-start;gap:2rem;height:100%}
+    .left-title{flex:1;padding:2rem;background:rgba(0,0,0,0.45);border-radius:12px;text-transform:uppercase;margin-top:40px}
+    .left-title h2{
+      font-family: 'Montserrat', sans-serif;
+      font-size:3.2rem;
+      color:#a5f3fc;
+      line-height:1.05;
+    }
+    .right-actions{display:flex;flex:1;align-items:center;justify-content:center}
+    .cards-row{display:flex;gap:2rem;align-items:flex-end;justify-content:center}
+    .card{
+      width:300px;
+      background:rgba(255,255,255,0.08);
+      border:2px solid rgba(255,255,255,0.9);
+      border-radius:14px;
+      padding:1rem;
+      text-align:center;
+      color:#fff;
+      cursor:pointer;
+      transition:transform .22s ease,background .22s ease,box-shadow .22s ease;
+      backdrop-filter:blur(6px);
+      box-shadow:0 8px 30px rgba(2,6,23,0.6);
+    }
+    .card:hover{transform:translateY(-8px);background:rgba(255,255,255,0.2)}
+    .card img{width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,0.6);margin-bottom:.9rem}
+    .card h3{font-family: 'Montserrat', sans-serif; font-size:1.25rem;color:#e6f8ff;margin-bottom:.4rem}
+    .card p{font-family: 'Open Sans', sans-serif; font-size:.98rem;color:#e6f4ee}
+    .eras-menu{display:flex;gap:3rem;justify-content:center;align-items:center;flex-wrap:wrap}
+    .era-tile{
+      width:240px;height:240px;border-radius:14px;background:rgba(0,0,0,0.45);
+      border:2px solid rgba(255,255,255,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:.8rem;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+    }
+    .era-tile:hover{transform:scale(1.06);box-shadow:0 12px 30px rgba(165,139,252,.12);background:rgba(255,255,255,0.06)}
+    .era-tile img{width:110px;height:110px;object-fit:cover;border-radius:50%;border:3px solid rgba(255,255,255,0.85)}
+    .era-tile h3{font-family: 'Montserrat', sans-serif; font-size:1.15rem;color:#eaf8ff}
+    .era-content{
+      max-width:1100px;margin:0 auto;background:rgba(0,0,0,0.55);padding:2rem;border-radius:12px;
+      display:flex;flex-direction:column;align-items:center;gap:1.6rem;
+    }
+    .epochs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;width:100%}
+    .epoch-card{
+      background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0.18));
+      border-radius:12px;padding:1rem;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;
+      border:1px solid rgba(255,255,255,0.12);text-align:left;
+    }
+    .epoch-card:hover{transform:translateY(-8px);box-shadow:0 10px 30px rgba(0,0,0,0.45)}
+    .epoch-card img{width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:.6rem}
+    .epoch-card h4{font-family: 'Montserrat', sans-serif; font-size:1.05rem;margin-bottom:.4rem;color:#dff7ff}
+    .epoch-card p{font-family: 'Open Sans', sans-serif; font-size:.95rem;color:#d3eaf6}
+    .epoch-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:2rem;background-size:cover;background-position:center;}
+    .epoch-card-panel{background:rgba(0,0,0,0.58);padding:1.6rem;border-radius:12px;max-width:900px;text-align:left;}
+    .epoch-card-panel h2{font-family: 'Montserrat', sans-serif;color:#ffdca8;margin-bottom:.6rem}
+    .epoch-card-panel p{font-family: 'Open Sans', sans-serif;color:#e0f4ff;line-height:1.45}
+    .nav-row{display:flex;gap:1rem;align-items:center;justify-content:center;margin-top:1rem}
+    .back{padding:.6rem 1rem;border-radius:10px;border:0;background:linear-gradient(90deg,#818cf8,#38bdf8);color:#fff;cursor:pointer}
+    .small-link{background:transparent;border:2px solid rgba(255,255,255,.14);color:#fff;padding:.45rem .8rem;border-radius:8px;cursor:pointer}
+    @media (max-width:920px){
+      .left-title h2{font-size:2rem}
+      .card{width:220px}
+      .era-tile{width:200px;height:200px}
+    }
+    @media (max-width:520px){
+      .left-title{display:none}
+      .layout-hero{flex-direction:column;align-items:center}
+      .cards-row{flex-direction:column;gap:1rem}
+      .card{width:100%;max-width:360px}
+      .era-tile{width:170px;height:170px}
+    }
+  </style>
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PANTALLA 1: INTRO -->
+  <section id="intro" class="screen active" style="background-image:url('fondo.jpg')">
+    <div class="overlay">
+      <h1 class="title">Fauna en las Eras Geológicas</h1>
+      <p class="lead">Un recorrido didáctico por las eras y sus especies representativas.</p>
+      <button id="enterBtn" class="btn">Entrar al proyecto</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 2: PORTADA / MENU -->
+  <section id="home" class="screen" style="background-image:url('fondo2.jpg')">
+    <div class="layout-hero">
+      <div class="left-title">
+        <h2>Proyecto<br>Fauna<br>en las<br>Eras Geológicas</h2>
+        <p style="margin-top:1rem;color:#e8f6ff;max-width:420px">Material interactivo: elige “Ver Eras” para explorar las eras y sus épocas, o "Fauna" para ver animales destacados.</p>
+      </div>
+
+      <div class="right-actions">
+        <div class="cards-row">
+          <div class="card" id="gotoEras">
+            <img src="eras.jpg" alt="Icono eras">
+            <h3>Ver Eras</h3>
+            <p>Accede al menú con las principales eras geológicas.</p>
+          </div>
+
+          <div class="card" id="gotoFauna">
+            <img src="fauna.jpg" alt="Icono fauna">
+            <h3>Fauna Detallada</h3>
+            <p>Ver tarjetas con animales representativos por era.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🔹 PANTALLA FAUNA DETALLADA -->
+  <section id="faunaDetallada" class="screen" style="background-image:url('fauna_fondo.jpg')">
+    <div class="era-content">
+      <h2 style="color:#ffdca8;text-align:center">Fauna Detallada</h2>
+      <p style="color:#dff7ff;max-width:900px;text-align:center;margin-bottom:1rem">
+        A lo largo de las eras geológicas, la fauna de la Tierra evolucionó desde organismos microscópicos marinos 
+        hasta gigantescos dinosaurios y los mamíferos modernos. Aquí conocerás algunos de los seres más 
+        impresionantes que poblaron nuestro planeta en distintas épocas.
+      </p>
+
+      <div class="epochs-grid">
+        <div class="epoch-card">
+          <img src="trilobite.jpg" alt="Trilobites">
+          <h4>Trilobites (Paleozoico)</h4>
+          <p>Artrópodos marinos de caparazón duro que dominaron los océanos durante millones de años. 
+             Representan uno de los primeros grupos animales complejos.</p>
+        </div>
+
+        <div class="epoch-card">
+          <img src="dunkleosteus.jpg" alt="Dunkleosteus">
+          <h4>Dunkleosteus (Devónico)</h4>
+          <p>Un pez acorazado de más de 8 metros, considerado uno de los primeros superdepredadores marinos del mundo antiguo.</p>
+        </div>
+
+        <div class="epoch-card">
+          <img src="trex.jpg" alt="Tyrannosaurus rex">
+          <h4>Tyrannosaurus rex (Cretácico)</h4>
+          <p>El carnívoro más icónico del Mesozoico, con mandíbulas poderosas y un tamaño de hasta 12 metros de largo.</p>
+        </div>
+
+        <div class="epoch-card">
+          <img src="pteranodon.jpg" alt="Pteranodon">
+          <h4>Pteranodon (Cretácico)</h4>
+          <p>Reptil volador con una envergadura de más de 6 metros; dominaba los cielos junto a otras especies de pterosaurios.</p>
+        </div>
+
+        <div class="epoch-card">
+          <img src="mamut.jpg" alt="Mamut lanudo">
+          <h4>Mamut lanudo (Cuaternario)</h4>
+          <p>Adaptado a climas fríos, este gigante peludo vivió durante la Edad de Hielo y convivió con los primeros humanos.</p>
+        </div>
+
+        <div class="epoch-card">
+          <img src="sable.jpg" alt="Tigre dientes de sable">
+          <h4>Smilodon (Tigre dientes de sable)</h4>
+          <p>Un poderoso felino del Cenozoico con colmillos de hasta 20 cm, símbolo de la megafauna prehistórica.</p>
+        </div>
+      </div>
+
+      <p style="color:#e8f6ff;text-align:center;margin-top:1rem;max-width:800px">
+        Cada una de estas criaturas refleja las adaptaciones únicas que la vida desarrolló frente a cambios climáticos, 
+        geológicos y biológicos a lo largo de millones de años. La fauna antigua sienta las bases de la biodiversidad actual.
+      </p>
+
+      <div class="nav-row">
+        <button class="back" id="backToHomeFromFauna">Volver al Inicio</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- PANTALLA 3: MENU DE ERAS -->
+  <section id="erasMenu" class="screen" style="background-image:url('fondo2.jpg')">
+    <div style="text-align:center;margin-bottom:22px">
+      <h1 class="eras-title" style="font-size:2.4rem;color:#a5f3fc;text-shadow:1px 1px 6px #000">Selecciona una Era</h1>
+      <p style="color:#dbefff;max-width:900px;margin:0 auto 18px">Haz clic en la era que quieres explorar. Luego verás las épocas y podrás abrir cada época para ver más información.</p>
+    </div>
+
+    <div class="eras-menu" id="menuPaleo">
+      <div class="era-tile" id="openPaleo">
+        <img src="paleozoico.jpg" alt="Paleozoico">
+        <h3>Paleozoico</h3>
+      </div>
+
+      <div class="era-tile" id="openMeso">
+        <img src="mesozoico.jpg" alt="Mesozoico">
+        <h3>Mesozoico</h3>
+      </div>
+
+      <div class="era-tile" id="openCeno">
+        <img src="cenozoico.jpg" alt="Cenozoico">
+        <h3>Cenozoico</h3>
+      </div>
+    </div>
+
+    <div class="nav-row" style="margin-top:30px">
+      <button class="back" id="backToHomeFromEras">Volver</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA ERA: PALEOZOICO (subpagina con épocas) -->
+  <section id="paleoEra" class="screen" style="background-image:url('paleozoico_bg.jpg')">
+    <div class="era-content">
+      <h2 style="color:#ffdca8">Paleozoico</h2>
+      <p style="color:#dff7ff;max-width:900px;text-align:center">
+        El Paleozoico (aprox. 590–290 millones de años ago) fue una era donde la vida marina se diversificó enormemente;
+        aparecieron los primeros artrópodos abundantes, peces óseos, plantas terrestres y los primeros anfibios.
+      </p>
+
+      <div class="epochs-grid">
+        <!-- Épocas como tarjetas con imágenes + nombre -->
+        <a href="cambrico/cambrico.html">
+          <div class="epoch-card" data-epoch="cambrico" data-era="paleo">
+            <img src="cambrico.jpg" alt="Cámbrico">
+            <h4>Cámbrico — 590</h4>
+            <p>Explosión de vida marina; trilobites y comunidades marinas abundan.</p>
+          </div>
+        </a>
+
+        <a href="ordovicico/ordovicico.html">
+          <div class="epoch-card" data-epoch="ordovicense" data-era="paleo">
+            <img src="ordovicense.jpg" alt="Ordovicense">
+            <h4>Ordovicense — 505</h4>
+            <p>Diversificación de invertebrados marinos y primeros arrecifes extensos.</p>
+          </div>
+        </a>
+
+        <a href="silurico/silurico.html">
+          <div class="epoch-card" data-epoch="silurico" data-era="paleo">
+            <img src="silurico.jpg" alt="Silúrico">
+            <h4>Silúrico — 438</h4>
+            <p>Expansión de plantas primitivas en tierra y evolución de peces con mandíbulas.</p>
+          </div>
+        </a>
+
+        <a href="devonico/devonico.html">
+          <div class="epoch-card" data-epoch="devonico" data-era="paleo">
+            <img src="devonico.jpg" alt="Devónico">
+            <h4>Devónico — 408</h4>
+            <p>\"Edad de los Peces\"; primeros anfibios y plantas vasculares terrestres.</p>
+          </div>
+        </a>
+
+        <a href="carbonifero/carbonifero.html">
+          <div class="epoch-card" data-epoch="carbonifero" data-era="paleo">
+            <img src="carbonifero.jpg" alt="Carbonífero">
+            <h4>Carbonífero — 360</h4>
+            <p>Grandes bosques pantanosos y abundancia de insectos gigantes; depósitos de carbón.</p>
+          </div>
+        </a>
+
+        <a href="permico/permico.html">
+          <div class="epoch-card" data-epoch="permico" data-era="paleo">
+            <img src="permico.jpg" alt="Pérmico">
+            <h4>Pérmico — 290</h4>
+            <p>Formación de supercontinente Pangea y crisis al final del Pérmico.</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="nav-row">
+        <button class="small-link" id="backToErasFromPaleo">Volver a Eras</button>
+        <button class="back" id="backToHomeFromPaleo">Volver al Inicio</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANTALLA ERA: MESOZOICO -->
+  <section id="mesoEra" class="screen" style="background-image:url('mesozoico_bg.jpg')">
+    <div class="era-content">
+      <h2 style="color:#ffdca8">Mesozoico</h2>
+      <p style="color:#dff7ff;max-width:900px;text-align:center">
+        El Mesozoico (aprox. 245–138 millones de años ago) es la \"Era de los Dinosaurios\"; se divide en Triásico, Jurásico y Cretácico.
+        Surgieron las aves y los mamíferos primitivos mientras las plantas con flores comenzaron a diversificarse.
+      </p>
+
+      <div class="epochs-grid">
+        <a href="triasico/triasico.html">
+          <div class="epoch-card" data-epoch="triasico" data-era="meso">
+            <img src="triasico.jpg" alt="Triásico">
+            <h4>Triásico — 245</h4>
+            <p>Aparecen los primeros dinosaurios y los mamíferos más primitivos.</p>
+          </div>
+        </a>
+
+        <a href="jurasico/jurasico.html">
+          <div class="epoch-card" data-epoch="jurasico" data-era="meso">
+            <img src="jurasico.jpg" alt="Jurásico">
+            <h4>Jurásico — 208</h4>
+            <p>Gran diversificación de dinosaurios y evolución de las primeras aves.</p>
+          </div>
+        </a>
+
+        <a href="cretacico/cretacico.html">
+          <div class="epoch-card" data-epoch="cretacico" data-era="meso">
+            <img src="cretacico.jpg" alt="Cretácico">
+            <h4>Cretácico — 138</h4>
+            <p>Máxima diversificación de dinosaurios; aparecen plantas con flores modernas.</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="nav-row">
+        <button class="small-link" id="backToErasFromMeso">Volver a Eras</button>
+        <button class="back" id="backToHomeFromMeso">Volver al Inicio</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANTALLA ERA: CENOZOICO -->
+  <section id="cenoEra" class="screen" style="background-image:url('cenozoico_bg.jpg')">
+    <div class="era-content">
+      <h2 style="color:#ffdca8">Cenozoico</h2>
+      <p style="color:#dff7ff;max-width:900px;text-align:center">
+        El Cenozoico (aprox. 65–2 millones de años ago) es la era moderna: mamíferos y aves se diversificaron,
+        y los homínidos (antecesores humanos) aparecen durante el Cuaternario.
+      </p>
+
+      <div class="epochs-grid">
+
+        <a href="terciario/terciario.html">
+          <div class="epoch-card" data-epoch="terciario" data-era="ceno">
+            <img src="terciario.jpg" alt="Terciario">
+            <h4>Terciario — 65</h4>
+            <p>Expansión y diversificación de mamíferos y aves modernas tras la extinción del Cretácico.</p>
+          </div>
+        </a>
+
+        <a href="cuaternario/cuaternario.html">
+          <div class="epoch-card" data-epoch="cuaternario" data-era="ceno">
+            <img src="cuaternario.jpg" alt="Cuaternario">
+            <h4>Cuaternario — 2</h4>
+            <p>Período reciente: glaciaciones, megafauna como mamuts y aparición del homo sapiens.</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="nav-row">
+        <button class="small-link" id="backToErasFromCeno">Volver a Eras</button>
+        <button class="back" id="backToHomeFromCeno">Volver al Inicio</button>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    /* --- Helper: controlar visibilidad de pantallas --- */
+    const screens = Array.from(document.querySelectorAll("section.screen"));
+    function show(id){
+      screens.forEach(s => s.classList.remove("active"));
+      const el = document.getElementById(id);
+      if(el) el.classList.add("active");
+      // Si la sección tiene un fondo inline (ya puesto), no hacemos nada más
+    }
+
+    /* Navegación básica */
+    document.getElementById("enterBtn").addEventListener("click", ()=> show("home"));
+    document.getElementById("gotoEras").addEventListener("click", ()=> show("erasMenu"));
+    document.getElementById("gotoFauna").addEventListener("click", ()=> show("faunaDetallada"));
+    document.getElementById("backToHomeFromFauna").addEventListener("click", ()=> show("home"));
+ // ejemplo: llevar a paleo o podrías hacer menú de fauna
+
+    // Desde eras menu abrir cada era
+    document.getElementById("openPaleo").addEventListener("click", ()=> show("paleoEra"));
+    document.getElementById("openMeso").addEventListener("click", ()=> show("mesoEra"));
+    document.getElementById("openCeno").addEventListener("click", ()=> show("cenoEra"));
+
+    // Back buttons
+    document.getElementById("backToHomeFromEras").addEventListener("click", ()=> show("home"));
+    document.getElementById("backToErasFromPaleo").addEventListener("click", ()=> show("erasMenu"));
+    document.getElementById("backToHomeFromPaleo").addEventListener("click", ()=> show("home"));
+    document.getElementById("backToErasFromMeso").addEventListener("click", ()=> show("erasMenu"));
+    document.getElementById("backToHomeFromMeso").addEventListener("click", ()=> show("home"));
+    document.getElementById("backToErasFromCeno").addEventListener("click", ()=> show("erasMenu"));
+    document.getElementById("backToHomeFromCeno").addEventListener("click", ()=> show("home"));
+
+    /* Épocas: al hacer click en una epoch-card abrimos su pantalla correspondiente */
+    document.querySelectorAll(".epoch-card").forEach(card=>{
+      card.addEventListener("click", ()=>{
+        const epoch = card.dataset.epoch; // ejemplo: "cambrico"
+        const era = card.dataset.era;     // "paleo" / "meso" / "ceno"
+        // construimos id: "epoch-cambrico", etc.
+        const id = "epoch-" + epoch;
+        show(id);
+      });
+    });
+
+    /* Los botones de "volver" dentro de cada pantalla de época usan data-back */
+    document.querySelectorAll("button[data-back]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const target = btn.getAttribute("data-back");
+        show(target);
+      });
+    });
+
+    /* Inicial: mostrar intro ya activo (ya aplicado en HTML) */
+    // show('intro'); // no hace falta, está activo por defecto
+
+      // Detectar si viene desde una subpágina con hash
+  window.addEventListener("DOMContentLoaded", () => {
+    if (window.location.hash === "#paleoEra") {
+      show("paleoEra");
+  }
+});
+
+  window.addEventListener("DOMContentLoaded", () => {
+    if (window.location.hash === "#mesoEra") {
+      show("mesoEra");
+  }
+});
+
+  window.addEventListener("DOMContentLoaded", () => {
+    if (window.location.hash === "#cenoEra") {
+      show("cenoEra");
+  }
+});
+  </script>
+</body>
+</html>
